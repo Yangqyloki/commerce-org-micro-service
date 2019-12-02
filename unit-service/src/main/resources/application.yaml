@@ -1,0 +1,24 @@
+server:
+  port: 10086
+spring:
+  application:
+    name: unit-service
+
+  security:
+    oauth2:
+      client:
+        provider:
+          token-uri: https://127.0.0.1:9002/authorizationserver/oauth/token
+        registration:
+          occ:
+            client-id: mobile_android
+            client-secret: secret
+            client-name: occ
+            authorization-grant-type: client_credentials
+            provider: my-oauth-provider
+
+user:
+  service:
+    gateway: https://electronics.local:9002
+    usergroups:
+        path: /rest/v2/{baseSiteId}/users/{userId}/customergroups
