@@ -26,7 +26,7 @@ public class UnitServiceApplication {
 
 
 	@Bean(name = {"userServiceWebClient"})
-	public WebClient cloudCartWebClient()
+	public WebClient userServiceWebClient()
 	{
 		return WebClient.builder().baseUrl(userServiceGateway)
 				.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).build();
