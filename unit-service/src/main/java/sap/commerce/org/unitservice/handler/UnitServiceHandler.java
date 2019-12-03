@@ -12,11 +12,13 @@ import sap.commerce.org.unitservice.client.UserClient;
 
 @Component
 public class UnitServiceHandler {
+
     @Autowired
     private UserClient userClient;
 
     public Mono<ServerResponse> getUnits(final ServerRequest request){
-        return userClient.getUserGroups("electronics","linda.wolf@rustic-hw.com").
+        System.out.println("Handler!!!!");
+        return userClient.getUserGroups(request).
                 flatMap(userGroups -> EntityResponse.fromObject(userGroups).contentType(MediaType.APPLICATION_JSON).
                         status(HttpStatus.OK).build());
     }

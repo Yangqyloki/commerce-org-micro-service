@@ -5,14 +5,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Mono;
 import sap.commerce.org.unitservice.client.UserClient;
 import sap.commerce.org.unitservice.dto.UserGroup;
+import sap.commerce.org.unitservice.dto.UserGroups;
 
 import java.util.List;
 
 @Component
 public class DefaultUserClient implements UserClient {
+
+    private static final String AUTHORIZATION = "Authorization";
 
     @Value("${user.service.usergroups.path}")
     private String userGroupsPath;
@@ -21,9 +25,16 @@ public class DefaultUserClient implements UserClient {
     private WebClient userServiceWebClient;
 
     @Override
-    public Mono<List<UserGroup>> getUserGroups(String baseSiteId, String userId) {
+    public Mono<UserGroups> getUserGroups( ServerRequest request) {
 
-        return userServiceWebClient.get().uri(uriBuilder -> uriBuilder.path(userGroupsPath).build(baseSiteId, userId)).
-                accept(MediaType.APPLICATION_JSON).retrieve().bodyToFlux(UserGroup.class).collectList();
+
+        String baseSiteId = request.pathVariable("baseSiteId");
+        String userId = request.pathVariable("userId");
+        Mono<UserGroups> test =  userServiceWebClient.get().uri(uriBuilder -> uriBuilder.path(userGroupsPath).build(baseSiteId, userId))
+                .header(AUTHORIZATION,request.headers().header(AUTHORIZATION).get(0))
+                .accept(MediaType.APPLICATION_JSON).retrieve().bodyToMono(UserGroups.class);
+
+        test.subscribe(groups->System.out.println(groups));
+        return test;
     }
 }

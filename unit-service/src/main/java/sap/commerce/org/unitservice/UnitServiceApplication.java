@@ -7,9 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
-import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
-import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootApplication
@@ -27,15 +26,38 @@ public class UnitServiceApplication {
 
 
 	@Bean(name = {"userServiceWebClient"})
-	public WebClient accountServiceWebClient(final ReactiveClientRegistrationRepository clientRegistrations,
-											 final ServerOAuth2AuthorizedClientRepository authorizedClients)
+	public WebClient cloudCartWebClient()
 	{
-		final ServerOAuth2AuthorizedClientExchangeFilterFunction oauth = new ServerOAuth2AuthorizedClientExchangeFilterFunction(
-				clientRegistrations, authorizedClients);
-
-
-		oauth.setDefaultClientRegistrationId(OCC_CLIENT_REGISTRATION_ID);
-		return WebClient.builder().baseUrl(userServiceGateway).filter(oauth)
+		return WebClient.builder().baseUrl(userServiceGateway)
 				.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).build();
 	}
+//	@Bean(name = {"userServiceWebClient"})
+//	public WebClient accountServiceWebClient(final ReactiveClientRegistrationRepository clientRegistrations,
+//											 final ServerOAuth2AuthorizedClientRepository authorizedClients)
+//	{
+//		final ServerOAuth2AuthorizedClientExchangeFilterFunction oauth = new ServerOAuth2AuthorizedClientExchangeFilterFunction(
+//				clientRegistrations, authorizedClients);
+//
+//
+//		oauth.setDefaultClientRegistrationId(OCC_CLIENT_REGISTRATION_ID);
+//		return WebClient.builder().baseUrl(userServiceGateway).filter(oauth)
+//				.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).build();
+//	}
+//
+//	@Bean
+//	public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+//		http.authorizeExchange()
+//				.anyExchange()
+//				.authenticated()
+//				.and()
+//				.oauth2Login();
+//		return http.build();
+//	}
+
+	@Bean
+	public SecurityWebFilterChain securityWebFilterChain(final ServerHttpSecurity http)
+	{
+		return http.authorizeExchange().anyExchange().permitAll().and().httpBasic().and().csrf().disable().build();
+	}
+
 }
