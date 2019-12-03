@@ -12,7 +12,7 @@ import sap.commerce.org.unitservice.handler.UnitServiceHandler;
 @Configuration
 public class UnitServiceRouter {
     public static final String UNIT_SERVICE_PREFIX = "/unitservice/v1/";
-    public static final String UNIT_SERVICE_UNITS = UNIT_SERVICE_PREFIX + "{userId}/units";
+    public static final String UNIT_SERVICE_UNITS = UNIT_SERVICE_PREFIX + "users/{userId}/units";
     public static final String UNIT_SERVICE_NEW_UNIT = UNIT_SERVICE_UNITS + "/{unitId}";
     public static final String UNIT_SERVICE_NEW_CUSTOMER = UNIT_SERVICE_NEW_UNIT + "/customers/{customerId}";
 
