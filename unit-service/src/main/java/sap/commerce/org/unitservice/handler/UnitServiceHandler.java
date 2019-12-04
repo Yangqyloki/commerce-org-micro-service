@@ -31,10 +31,14 @@ public class UnitServiceHandler {
     }
 
     public Mono<ServerResponse> createUnit(final ServerRequest request){
-        System.out.println("createUnit!!!!");
-        List<UnitDTO> units = unitClient.getUnitsForUser("linda.wolf@rustic-hw.com");
-        units.forEach(unit -> System.out.println(unit));
-        return null;
+        String userId = request.pathVariable("userId");
+        List<UnitDTO> units = unitClient.getUnitsForUser(userId);
+        units.forEach(unit -> System.out.println(unit.getUnitName()));
+
+        return  request.bodyToMono(UnitDTO.class).
+                flatMap(unit -> { System.out.println(unit);
+                    return EntityResponse.fromObject(unit).contentType(MediaType.APPLICATION_JSON).
+                            status(HttpStatus.OK).build();});
     }
 
     public Mono<ServerResponse> createCustomerForUnit(final ServerRequest request){
