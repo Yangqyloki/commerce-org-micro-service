@@ -1,22 +1,17 @@
 package sap.commerce.org.unitservice.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.List;
 
 @Data
-@Entity
-@Table(name="unit")
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties("hibernateLazyInitializer")
+@Document(collection = "b2b_commerce_org.unit")
 public class UnitDTO {
-    @Id
     private String unitId;
 
     private String unitName;
@@ -24,4 +19,8 @@ public class UnitDTO {
     private String parentUnit;
 
     private String approvalProcess;
+
+    private String path;
+
+    private List<CustomerDTO> unitCustomers;
 }
