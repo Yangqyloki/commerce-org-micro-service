@@ -80,21 +80,20 @@ public class UnitServiceHandler {
     }
 
     private void validateCreateUnitPath(Map<String, String> variables) {
-        if(variables == null || variables.isEmpty())
-        {
-            throw new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST,List.of(MISSING_PARAMETER));
+        if (variables == null || variables.isEmpty()) {
+            throw new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST, List.of(MISSING_PARAMETER));
         }
-        validateRequestPath(variables.get(BASE_SITE_ID),INVALID_REQUEST_BASE_SITE_ID);
-        validateRequestPath(variables.get(USER_ID),INVALID_REQUEST_USER_ID);
+        validateRequestPath(variables.get(BASE_SITE_ID), INVALID_REQUEST_BASE_SITE_ID);
+        validateRequestPath(variables.get(USER_ID), INVALID_REQUEST_USER_ID);
     }
-    private void  validateCreateCustomerPath(Map<String, String> variables){
-        if(variables == null || variables.isEmpty())
-        {
-            throw new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST,List.of(MISSING_PARAMETER));
+
+    private void validateCreateCustomerPath(Map<String, String> variables) {
+        if (variables == null || variables.isEmpty()) {
+            throw new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST, List.of(MISSING_PARAMETER));
         }
-        validateRequestPath(variables.get(BASE_SITE_ID),INVALID_REQUEST_BASE_SITE_ID);
-        validateRequestPath(variables.get(USER_ID),INVALID_REQUEST_USER_ID);
-        validateRequestPath(variables.get(UNIT_ID),INVALID_REQUEST_UNIT_ID);
+        validateRequestPath(variables.get(BASE_SITE_ID), INVALID_REQUEST_BASE_SITE_ID);
+        validateRequestPath(variables.get(USER_ID), INVALID_REQUEST_USER_ID);
+        validateRequestPath(variables.get(UNIT_ID), INVALID_REQUEST_UNIT_ID);
     }
 
     private void validateRequestPath(String path, Errors error) {
@@ -104,7 +103,7 @@ public class UnitServiceHandler {
         }
     }
 
-    private <T> T validateRequestBody(T body){
+    private <T> T validateRequestBody(T body) {
 //        System.out.println("validateRequestBody: " + body);
 //        request.bodyToMono(UnitRequestDTO.class).doOnError();
 //        request.bodyToMono(UnitRequestDTO.class).map(unit->{
@@ -116,7 +115,7 @@ public class UnitServiceHandler {
 //                    return unit;
 //                }
 //        );
-        if(body == null){
+        if (body == null) {
             throw new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST,
                     List.of(INVALID_REQUEST_REQUEST_BODY));
         }
@@ -124,7 +123,7 @@ public class UnitServiceHandler {
     }
 
     private void validateRequestHeader(final ServerRequest.Headers headers) {
-        if(CollectionUtils.isEmpty(headers.header(AUTHORIZATION)) || headers.header(AUTHORIZATION).get(0) == null){
+        if (CollectionUtils.isEmpty(headers.header(AUTHORIZATION)) || headers.header(AUTHORIZATION).get(0) == null) {
             throw new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST,
                     List.of(INVALID_REQUEST_REQUEST_HEADER));
         }

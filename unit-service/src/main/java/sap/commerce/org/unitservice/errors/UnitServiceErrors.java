@@ -1,12 +1,10 @@
 package sap.commerce.org.unitservice.errors;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
 import sap.commerce.cloud.hbcloudcommons.error.Errors;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum UnitServiceErrors implements Errors
-{
+public enum UnitServiceErrors implements Errors {
     INVALID_REQUEST("10000", "The request is invalid."),
     MISSING_PARAMETER("10001", "Required path parameter is missing."),
     INVALID_REQUEST_BASE_SITE_ID("10002", "baseSiteId is missing"),
@@ -20,19 +18,16 @@ public enum UnitServiceErrors implements Errors
     private final String code;
     private final String message;
 
-    UnitServiceErrors(final String code, final String message)
-    {
+    UnitServiceErrors(final String code, final String message) {
         this.code = code;
         this.message = message;
     }
 
-    public String getCode()
-    {
+    public String getCode() {
         return code;
     }
 
-    public String getMessage()
-    {
+    public String getMessage() {
         return message;
     }
 }
