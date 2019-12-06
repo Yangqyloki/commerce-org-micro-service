@@ -24,17 +24,15 @@ import static sap.commerce.org.unitservice.errors.UnitServiceErrors.*;
 @Component
 public class UnitServiceHandler {
 
-
-
     @Autowired
     private UserClient userClient;
 
     @Autowired
     private UnitClient unitClient;
 
-    public Mono<ServerResponse> getUnitsByUser(final ServerRequest request){
+    public Mono<ServerResponse> getUnitsByUser(final ServerRequest request) {
         validateCreateUnitPath(request.pathVariables());
-        validateRequestBody(request.bodyToMono(UnitDTO.class).map(unit->validateRequestBody(unit)));
+        validateRequestBody(request.bodyToMono(UnitDTO.class).map(unit -> validateRequestBody(unit)));
         validateRequestHeader(request.headers());
         return unitClient.getUnitsByUser(request.pathVariable(USER_ID)).
                 flatMap(userGroups -> EntityResponse.fromObject(userGroups).contentType(MediaType.APPLICATION_JSON).
@@ -42,19 +40,19 @@ public class UnitServiceHandler {
 
     }
 
-    public Mono<ServerResponse> createUnit(final ServerRequest request){
+    public Mono<ServerResponse> createUnit(final ServerRequest request) {
         validateCreateUnitPath(request.pathVariables());
-        validateRequestBody(request.bodyToMono(UnitDTO.class).map(unit->validateRequestBody(unit)));
+        validateRequestBody(request.bodyToMono(UnitDTO.class).map(unit -> validateRequestBody(unit)));
         validateRequestHeader(request.headers());
-        return  request.bodyToMono(UnitDTO.class).
+        return request.bodyToMono(UnitDTO.class).
                 flatMap(unit -> unitClient.creatUnit(request.pathVariable(USER_ID), unit)).
                 flatMap(result -> EntityResponse.fromObject(result).contentType(MediaType.APPLICATION_JSON).
                         status(HttpStatus.OK).build());
     }
 
-    public Mono<ServerResponse> createCustomerForUnit(final ServerRequest request){
+    public Mono<ServerResponse> createCustomerForUnit(final ServerRequest request) {
         validateCreateUnitPath(request.pathVariables());
-        validateRequestBody(request.bodyToMono(UnitDTO.class).map(unit->validateRequestBody(unit)));
+        validateRequestBody(request.bodyToMono(UnitDTO.class).map(unit -> validateRequestBody(unit)));
         validateRequestHeader(request.headers());
         return userClient.createCustomerForUnit(request).
                 flatMap(userGroups -> EntityResponse.fromObject(userGroups).contentType(MediaType.APPLICATION_JSON).
@@ -62,21 +60,20 @@ public class UnitServiceHandler {
     }
 
     private void validateCreateUnitPath(Map<String, String> variables) {
-        if(variables == null || variables.isEmpty())
-        {
-            throw new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST,List.of(MISSING_PARAMETER));
+        if (variables == null || variables.isEmpty()) {
+            throw new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST, List.of(MISSING_PARAMETER));
         }
-        validateRequestPath(variables.get(BASE_SITE_ID),INVALID_REQUEST_BASE_SITE_ID);
-        validateRequestPath(variables.get(USER_ID),INVALID_REQUEST_USER_ID);
+        validateRequestPath(variables.get(BASE_SITE_ID), INVALID_REQUEST_BASE_SITE_ID);
+        validateRequestPath(variables.get(USER_ID), INVALID_REQUEST_USER_ID);
     }
-    private void  validateCreateCustomerPath(Map<String, String> variables){
-        if(variables == null || variables.isEmpty())
-        {
-            throw new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST,List.of(MISSING_PARAMETER));
+
+    private void validateCreateCustomerPath(Map<String, String> variables) {
+        if (variables == null || variables.isEmpty()) {
+            throw new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST, List.of(MISSING_PARAMETER));
         }
-        validateRequestPath(variables.get(BASE_SITE_ID),INVALID_REQUEST_BASE_SITE_ID);
-        validateRequestPath(variables.get(USER_ID),INVALID_REQUEST_USER_ID);
-        validateRequestPath(variables.get(UNIT_ID),INVALID_REQUEST_UNIT_ID);
+        validateRequestPath(variables.get(BASE_SITE_ID), INVALID_REQUEST_BASE_SITE_ID);
+        validateRequestPath(variables.get(USER_ID), INVALID_REQUEST_USER_ID);
+        validateRequestPath(variables.get(UNIT_ID), INVALID_REQUEST_UNIT_ID);
     }
 
     private void validateRequestPath(String path, Errors error) {
@@ -86,7 +83,7 @@ public class UnitServiceHandler {
         }
     }
 
-    private <T> T validateRequestBody(T body){
+    private <T> T validateRequestBody(T body) {
 //        System.out.println("validateRequestBody: " + body);
 //        request.bodyToMono(UnitRequestDTO.class).doOnError();
 //        request.bodyToMono(UnitRequestDTO.class).map(unit->{
@@ -98,7 +95,7 @@ public class UnitServiceHandler {
 //                    return unit;
 //                }
 //        );
-        if(body == null){
+        if (body == null) {
             throw new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST,
                     List.of(INVALID_REQUEST_REQUEST_BODY));
         }
@@ -106,7 +103,7 @@ public class UnitServiceHandler {
     }
 
     private void validateRequestHeader(final ServerRequest.Headers headers) {
-        if(CollectionUtils.isEmpty(headers.header(AUTHORIZATION)) || headers.header(AUTHORIZATION).get(0) == null){
+        if (CollectionUtils.isEmpty(headers.header(AUTHORIZATION)) || headers.header(AUTHORIZATION).get(0) == null) {
             throw new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST,
                     List.of(INVALID_REQUEST_REQUEST_HEADER));
         }

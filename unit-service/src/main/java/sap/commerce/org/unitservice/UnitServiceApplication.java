@@ -15,22 +15,21 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class UnitServiceApplication {
 
-	private static final String OCC_CLIENT_REGISTRATION_ID = "occ";
+    private static final String OCC_CLIENT_REGISTRATION_ID = "occ";
 
-	@Value("${user.service.gateway}")
-	private String userServiceGateway;
+    @Value("${user.service.gateway}")
+    private String userServiceGateway;
 
-	public static void main(String[] args) {
-		SpringApplication.run(UnitServiceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(UnitServiceApplication.class, args);
+    }
 
 
-	@Bean(name = {"userServiceWebClient"})
-	public WebClient userServiceWebClient()
-	{
-		return WebClient.builder().baseUrl(userServiceGateway)
-				.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).build();
-	}
+    @Bean(name = {"userServiceWebClient"})
+    public WebClient userServiceWebClient() {
+        return WebClient.builder().baseUrl(userServiceGateway)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).build();
+    }
 //	@Bean(name = {"userServiceWebClient"})
 //	public WebClient accountServiceWebClient(final ReactiveClientRegistrationRepository clientRegistrations,
 //											 final ServerOAuth2AuthorizedClientRepository authorizedClients)
@@ -54,10 +53,9 @@ public class UnitServiceApplication {
 //		return http.build();
 //	}
 
-	@Bean
-	public SecurityWebFilterChain securityWebFilterChain(final ServerHttpSecurity http)
-	{
-		return http.authorizeExchange().anyExchange().permitAll().and().httpBasic().and().csrf().disable().build();
-	}
+    @Bean
+    public SecurityWebFilterChain securityWebFilterChain(final ServerHttpSecurity http) {
+        return http.authorizeExchange().anyExchange().permitAll().and().httpBasic().and().csrf().disable().build();
+    }
 
 }

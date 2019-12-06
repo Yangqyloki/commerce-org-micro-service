@@ -28,11 +28,11 @@ public class DefaultUnitClient implements UnitClient {
     @Override
     public Mono<UnitDTO> creatUnit(String userId, UnitDTO unit) {
         List<UnitDTO> units = unitDao.findAllUnits();
-        if(units.stream().parallel().filter(u -> u.getUnitId().equals(unit.getUnitId())).findAny().isPresent()){
+        if (units.stream().parallel().filter(u -> u.getUnitId().equals(unit.getUnitId())).findAny().isPresent()) {
             System.out.println("This unit id [" + unit.getUnitId() + "] is already in use!");
-        } else if(units.stream().parallel().filter(u -> u.getUnitId().equals(unit.getParentUnit())).findAny().isEmpty()) {
+        } else if (units.stream().parallel().filter(u -> u.getUnitId().equals(unit.getParentUnit())).findAny().isEmpty()) {
             System.out.println("This parent unit [" + unit.getUnitId() + "] is not found!");
         }
-            return Mono.just(unitDao.createUnit(unit));
+        return Mono.just(unitDao.createUnit(unit));
     }
 }
