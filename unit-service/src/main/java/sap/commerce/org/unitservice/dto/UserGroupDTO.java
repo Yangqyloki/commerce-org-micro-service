@@ -1,6 +1,7 @@
 package sap.commerce.org.unitservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

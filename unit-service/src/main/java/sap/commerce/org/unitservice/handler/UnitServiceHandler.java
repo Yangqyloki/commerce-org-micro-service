@@ -1,5 +1,11 @@
 package sap.commerce.org.unitservice.handler;
 
+import static sap.commerce.org.unitservice.constants.UnitServiceConstants.*;
+import static sap.commerce.org.unitservice.errors.UnitServiceErrors.*;
+
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -8,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.reactive.function.server.EntityResponse;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+
 import reactor.core.publisher.Mono;
 import sap.commerce.cloud.hbcloudcommons.error.Errors;
 import sap.commerce.cloud.hbcloudcommons.error.GlobalWebException;
@@ -17,12 +24,6 @@ import sap.commerce.org.unitservice.dto.CustomerDTO;
 import sap.commerce.org.unitservice.dto.OccCustomerDTO;
 import sap.commerce.org.unitservice.dto.UnitDTO;
 import sap.commerce.org.unitservice.dto.utils.DTOConverter;
-
-import java.util.List;
-import java.util.Map;
-
-import static sap.commerce.org.unitservice.constants.UnitServiceConstants.*;
-import static sap.commerce.org.unitservice.errors.UnitServiceErrors.*;
 
 @Component
 public class UnitServiceHandler {
@@ -79,7 +80,7 @@ public class UnitServiceHandler {
                 status(HttpStatus.OK).build());
     }
 
-    private void validateCreateUnitPath(Map<String, String> variables) {
+    private void validateCreateUnitPath(final Map<String, String> variables) {
         if (variables == null || variables.isEmpty()) {
             throw new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST, List.of(MISSING_PARAMETER));
         }
@@ -87,7 +88,7 @@ public class UnitServiceHandler {
         validateRequestPath(variables.get(USER_ID), INVALID_REQUEST_USER_ID);
     }
 
-    private void validateCreateCustomerPath(Map<String, String> variables) {
+    private void validateCreateCustomerPath(final Map<String, String> variables) {
         if (variables == null || variables.isEmpty()) {
             throw new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST, List.of(MISSING_PARAMETER));
         }
@@ -96,14 +97,14 @@ public class UnitServiceHandler {
         validateRequestPath(variables.get(UNIT_ID), INVALID_REQUEST_UNIT_ID);
     }
 
-    private void validateRequestPath(String path, Errors error) {
+    private void validateRequestPath(final String path, final Errors error) {
         if (path == null || path.isBlank()) {
             throw new GlobalWebException(HttpStatus.BAD_REQUEST, MISSING_PARAMETER,
                     List.of(error));
         }
     }
 
-    private <T> T validateRequestBody(T body) {
+    private <T> T validateRequestBody(final T body) {
 //        System.out.println("validateRequestBody: " + body);
 //        request.bodyToMono(UnitRequestDTO.class).doOnError();
 //        request.bodyToMono(UnitRequestDTO.class).map(unit->{

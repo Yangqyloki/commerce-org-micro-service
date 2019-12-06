@@ -1,11 +1,13 @@
 package sap.commerce.org.unitservice.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.List;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
