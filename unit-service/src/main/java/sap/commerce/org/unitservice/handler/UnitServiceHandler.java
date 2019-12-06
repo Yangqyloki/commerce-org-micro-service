@@ -13,7 +13,10 @@ import sap.commerce.cloud.hbcloudcommons.error.Errors;
 import sap.commerce.cloud.hbcloudcommons.error.GlobalWebException;
 import sap.commerce.org.unitservice.client.UnitClient;
 import sap.commerce.org.unitservice.client.UserClient;
+import sap.commerce.org.unitservice.dto.CustomerDTO;
+import sap.commerce.org.unitservice.dto.OccCustomerDTO;
 import sap.commerce.org.unitservice.dto.UnitDTO;
+import sap.commerce.org.unitservice.dto.utils.DTOConverter;
 
 import java.util.List;
 import java.util.Map;
@@ -24,8 +27,6 @@ import static sap.commerce.org.unitservice.errors.UnitServiceErrors.*;
 @Component
 public class UnitServiceHandler {
 
-
-
     @Autowired
     private UserClient userClient;
 
@@ -33,9 +34,9 @@ public class UnitServiceHandler {
     private UnitClient unitClient;
 
     public Mono<ServerResponse> getUnitsByUser(final ServerRequest request){
-        validateCreateUnitPath(request.pathVariables());
-        validateRequestBody(request.bodyToMono(UnitDTO.class).map(unit->validateRequestBody(unit)));
-        validateRequestHeader(request.headers());
+//        validateCreateUnitPath(request.pathVariables());
+//        validateRequestBody(request.bodyToMono(UnitDTO.class).map(unit->validateRequestBody(unit)));
+//        validateRequestHeader(request.headers());
         return unitClient.getUnitsByUser(request.pathVariable(USER_ID)).
                 flatMap(userGroups -> EntityResponse.fromObject(userGroups).contentType(MediaType.APPLICATION_JSON).
                         status(HttpStatus.OK).build());
@@ -43,9 +44,9 @@ public class UnitServiceHandler {
     }
 
     public Mono<ServerResponse> createUnit(final ServerRequest request){
-        validateCreateUnitPath(request.pathVariables());
-        validateRequestBody(request.bodyToMono(UnitDTO.class).map(unit->validateRequestBody(unit)));
-        validateRequestHeader(request.headers());
+//        validateCreateUnitPath(request.pathVariables());
+//        validateRequestBody(request.bodyToMono(UnitDTO.class).map(unit->validateRequestBody(unit)));
+//        validateRequestHeader(request.headers());
         return  request.bodyToMono(UnitDTO.class).
                 flatMap(unit -> unitClient.creatUnit(request.pathVariable(USER_ID), unit)).
                 flatMap(result -> EntityResponse.fromObject(result).contentType(MediaType.APPLICATION_JSON).
@@ -53,12 +54,29 @@ public class UnitServiceHandler {
     }
 
     public Mono<ServerResponse> createCustomerForUnit(final ServerRequest request){
-        validateCreateUnitPath(request.pathVariables());
-        validateRequestBody(request.bodyToMono(UnitDTO.class).map(unit->validateRequestBody(unit)));
-        validateRequestHeader(request.headers());
-        return userClient.createCustomerForUnit(request).
-                flatMap(userGroups -> EntityResponse.fromObject(userGroups).contentType(MediaType.APPLICATION_JSON).
-                        status(HttpStatus.OK).build());
+//        validateCreateUnitPath(request.pathVariables());
+//        validateRequestBody(request.bodyToMono(CustomerDTO.class).map(unit->validateRequestBody(unit)));
+//        validateRequestHeader(request.headers());
+        return userClient.getUserGroups(request).flatMap(userGroupList -> {
+            System.out.println("YQY userGroupList: " + userGroupList);
+            if(userGroupList.getUserGroups().stream().filter(group-> B2B_ADMIN_GROUP.equals(group.getUid())).findAny().isPresent())
+            {
+                System.out.println("If Seg!!!!");
+                return request.bodyToMono(CustomerDTO.class).flatMap(customerInRequest->{
+                    OccCustomerDTO occCustomer = DTOConverter.convertCustomer(customerInRequest);
+                    System.out.println("occCustomer: " + occCustomer);
+                    return userClient.createCustomer(request,occCustomer).flatMap((occCustomerInResopnse)->{
+                        System.out.println("Set User Group!!!!!!");
+                        userClient.setCustomerToUserGroup(request,customerInRequest);
+                        return unitClient.createCustomerForUnit(request.pathVariable(UNIT_ID),customerInRequest);
+                    });
+                });
+
+            }
+            return Mono.error(new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST, List.of(INVALID_USER_NOT_ADMIN)));
+
+        }).flatMap(unit->EntityResponse.fromObject(unit).contentType(MediaType.APPLICATION_JSON).
+                status(HttpStatus.OK).build());
     }
 
     private void validateCreateUnitPath(Map<String, String> variables) {

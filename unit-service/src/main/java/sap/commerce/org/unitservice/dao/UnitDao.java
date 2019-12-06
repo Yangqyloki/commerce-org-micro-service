@@ -22,15 +22,16 @@ public class UnitDao {
 
     public List<UnitDTO> getUnitsByUser(String userId){
         UnitUserDTO unitUser = getUnitUser(userId);
-//        System.out.println("UnitDao userUnit: " + userUnit);
+//        System.out.println("UnitDao userUnit: " + unitUser);
         if(unitUser == null || StringUtils.isBlank(unitUser.getUnitId())){
             return List.of(new UnitDTO());
         }
         Query queryUnits = new Query();
-//        String regex = "^(\\/"+ userUnit.getUnitId()+")[\\s\\S]+";
+//        String regex = "^(\\/"+ unitUser.getUnitId()+")[\\s\\S]+";
 //        System.out.println("regex: " + regex);
-        queryUnits.addCriteria(Criteria.where("path").regex("^(\\/"+ unitUser.getUnitId()+")?[\\s\\S]+"));
+        queryUnits.addCriteria(Criteria.where("path").regex("^(\\/"+ unitUser.getUnitId()+")"));
         List<UnitDTO> userUnits =  mongoTemplate.find(queryUnits, UnitDTO.class,"b2b_commerce_org.unit");
+//        userUnits.forEach(System.out::println);
         return userUnits;
     }
 

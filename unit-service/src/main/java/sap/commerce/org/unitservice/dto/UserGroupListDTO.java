@@ -9,13 +9,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CustomerDTO {
-
-    private String title;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String parentUnit;
-    private List<String> roles;
-
+public class UserGroupListDTO {
+    List<UserGroupDTO> userGroups;
 }

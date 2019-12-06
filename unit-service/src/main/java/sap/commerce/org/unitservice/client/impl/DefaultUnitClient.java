@@ -5,9 +5,12 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import sap.commerce.org.unitservice.client.UnitClient;
 import sap.commerce.org.unitservice.dao.UnitDao;
+import sap.commerce.org.unitservice.dto.CustomerDTO;
 import sap.commerce.org.unitservice.dto.UnitDTO;
 
 import java.util.List;
+
+import static sap.commerce.org.unitservice.constants.UnitServiceConstants.UNIT_ID;
 
 
 @Component
@@ -34,5 +37,11 @@ public class DefaultUnitClient implements UnitClient {
             System.out.println("This parent unit [" + unit.getUnitId() + "] is not found!");
         }
             return Mono.just(unitDao.createUnit(unit));
+    }
+
+    @Override
+    public Mono<UnitDTO> createCustomerForUnit(String unitId,CustomerDTO customer) {
+        unitDao.saveUnitCustomer(unitId,customer);
+        return Mono.just(unitDao.getUnitByUnitId(unitId));
     }
 }

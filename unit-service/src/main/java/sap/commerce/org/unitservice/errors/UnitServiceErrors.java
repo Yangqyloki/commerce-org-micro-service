@@ -15,7 +15,7 @@ public enum UnitServiceErrors implements Errors
     MISSING_PARAMETER_TENANT_ID("10005", "TenantId parameter is missing."),
     INVALID_REQUEST_REQUEST_BODY("10006", "Request body is missing"),
     INVALID_REQUEST_REQUEST_HEADER("10007", "Request header is missing"),
-    INVALID_REQUEST_PAYMENT_AUTHORIZATION_STATUS("10008", "Status is missing");
+    INVALID_USER_NOT_ADMIN("10008", "Status is missing");
 
     private final String code;
     private final String message;

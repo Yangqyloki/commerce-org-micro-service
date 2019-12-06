@@ -1,21 +1,18 @@
 package sap.commerce.org.unitservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.beans.ConstructorProperties;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CustomerDTO {
+@AllArgsConstructor
+public class MemberListDTO {
 
-    private String title;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String parentUnit;
-    private List<String> roles;
-
+    List<MemberDTO> members;
 }
