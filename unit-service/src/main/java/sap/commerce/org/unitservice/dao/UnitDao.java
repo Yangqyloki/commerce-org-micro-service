@@ -22,16 +22,16 @@ public class UnitDao {
 
     public List<UnitDTO> getUnitsByUser(final String userId) {
         final UnitUserDTO unitUser = getUnitUser(userId);
-//        System.out.println("UnitDao userUnit: " + unitUser);
-        if(unitUser == null || StringUtils.isBlank(unitUser.getUnitId())){
+        // System.out.println("UnitDao userUnit: " + unitUser);
+        if (unitUser == null || StringUtils.isBlank(unitUser.getUnitId())) {
             return List.of(new UnitDTO());
         }
         final Query queryUnits = new Query();
-//        String regex = "^(\\/"+ unitUser.getUnitId()+")[\\s\\S]+";
-//        System.out.println("regex: " + regex);
-        queryUnits.addCriteria(Criteria.where("path").regex("^(\\/"+ unitUser.getUnitId()+")"));
-        final List<UnitDTO> userUnits =  mongoTemplate.find(queryUnits, UnitDTO.class,"b2b_commerce_org.unit");
-//        userUnits.forEach(System.out::println);
+        // String regex = "^(\\/"+ unitUser.getUnitId()+")[\\s\\S]+";
+        // System.out.println("regex: " + regex);
+        queryUnits.addCriteria(Criteria.where("path").regex("^(\\/" + unitUser.getUnitId() + ")"));
+        final List<UnitDTO> userUnits = mongoTemplate.find(queryUnits, UnitDTO.class, "b2b_commerce_org.unit");
+        // userUnits.forEach(System.out::println);
         return userUnits;
     }
 
@@ -40,7 +40,6 @@ public class UnitDao {
         queryUserUnit.addCriteria(Criteria.where("userId").is(userId));
         return mongoTemplate.findOne(queryUserUnit, UnitUserDTO.class, "b2b_commerce_org.unitUser");
     }
-
 
     public List<UnitDTO> findAllUnits() {
         return mongoTemplate.findAll(UnitDTO.class, "b2b_commerce_org.unit");

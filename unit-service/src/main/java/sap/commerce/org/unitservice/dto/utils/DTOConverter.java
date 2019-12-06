@@ -11,8 +11,8 @@ import sap.commerce.org.unitservice.dto.OccCustomerDTO;
 
 public class DTOConverter {
 
-    public static OccCustomerDTO convertCustomer(final CustomerDTO customer){
-        final OccCustomerDTO occCustomerDTO= new OccCustomerDTO();
+    public static OccCustomerDTO convertCustomer(final CustomerDTO customer) {
+        final OccCustomerDTO occCustomerDTO = new OccCustomerDTO();
         occCustomerDTO.setFirstName(customer.getFirstName());
         occCustomerDTO.setLastName(customer.getLastName());
         occCustomerDTO.setPassword(DEFAULT_PWD);
@@ -21,7 +21,7 @@ public class DTOConverter {
         return occCustomerDTO;
     }
 
-    public static MemberListDTO convertMemberList(final CustomerDTO customer){
+    public static MemberListDTO convertMemberList(final CustomerDTO customer) {
         final MemberDTO member = new MemberDTO();
         member.setName(customer.getLastName() + " " + customer.getFirstName());
         member.setUid(customer.getEmail());

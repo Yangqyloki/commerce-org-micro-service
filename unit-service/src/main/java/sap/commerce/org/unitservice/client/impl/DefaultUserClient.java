@@ -1,6 +1,8 @@
 package sap.commerce.org.unitservice.client.impl;
 
-import static sap.commerce.org.unitservice.constants.UnitServiceConstants.*;
+import static sap.commerce.org.unitservice.constants.UnitServiceConstants.AUTHORIZATION;
+import static sap.commerce.org.unitservice.constants.UnitServiceConstants.BASE_SITE_ID;
+import static sap.commerce.org.unitservice.constants.UnitServiceConstants.USER_ID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +15,10 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Mono;
 import sap.commerce.org.unitservice.client.UserClient;
 import sap.commerce.org.unitservice.dao.UnitDao;
-import sap.commerce.org.unitservice.dto.*;
+import sap.commerce.org.unitservice.dto.CustomerDTO;
+import sap.commerce.org.unitservice.dto.MemberListDTO;
+import sap.commerce.org.unitservice.dto.OccCustomerDTO;
+import sap.commerce.org.unitservice.dto.UserGroupListDTO;
 import sap.commerce.org.unitservice.dto.utils.DTOConverter;
 
 @Component

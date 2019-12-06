@@ -7,11 +7,10 @@ import sap.commerce.org.unitservice.dto.CustomerDTO;
 import sap.commerce.org.unitservice.dto.OccCustomerDTO;
 import sap.commerce.org.unitservice.dto.UserGroupListDTO;
 
-
 public interface UserClient {
     Mono<UserGroupListDTO> getUserGroups(ServerRequest request);
 
-    Mono<OccCustomerDTO> createCustomer(ServerRequest request,OccCustomerDTO occCustomer);
+    Mono<OccCustomerDTO> createCustomer(ServerRequest request, OccCustomerDTO occCustomer);
 
     void setCustomerToUserGroup(ServerRequest request, CustomerDTO customerInRequest);
 }

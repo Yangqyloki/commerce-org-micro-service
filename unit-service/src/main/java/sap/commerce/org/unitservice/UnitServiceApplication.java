@@ -24,34 +24,34 @@ public class UnitServiceApplication {
         SpringApplication.run(UnitServiceApplication.class, args);
     }
 
-
-    @Bean(name = {"userServiceWebClient"})
+    @Bean(name = { "userServiceWebClient" })
     public WebClient userServiceWebClient() {
         return WebClient.builder().baseUrl(userServiceGateway)
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).build();
+            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).build();
     }
-//	@Bean(name = {"userServiceWebClient"})
-//	public WebClient accountServiceWebClient(final ReactiveClientRegistrationRepository clientRegistrations,
-//											 final ServerOAuth2AuthorizedClientRepository authorizedClients)
-//	{
-//		final ServerOAuth2AuthorizedClientExchangeFilterFunction oauth = new ServerOAuth2AuthorizedClientExchangeFilterFunction(
-//				clientRegistrations, authorizedClients);
-//
-//
-//		oauth.setDefaultClientRegistrationId(OCC_CLIENT_REGISTRATION_ID);
-//		return WebClient.builder().baseUrl(userServiceGateway).filter(oauth)
-//				.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).build();
-//	}
-//
-//	@Bean
-//	public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-//		http.authorizeExchange()
-//				.anyExchange()
-//				.authenticated()
-//				.and()
-//				.oauth2Login();
-//		return http.build();
-//	}
+    // @Bean(name = {"userServiceWebClient"})
+    // public WebClient accountServiceWebClient(final ReactiveClientRegistrationRepository clientRegistrations,
+    // final ServerOAuth2AuthorizedClientRepository authorizedClients)
+    // {
+    // final ServerOAuth2AuthorizedClientExchangeFilterFunction oauth = new
+    // ServerOAuth2AuthorizedClientExchangeFilterFunction(
+    // clientRegistrations, authorizedClients);
+    //
+    //
+    // oauth.setDefaultClientRegistrationId(OCC_CLIENT_REGISTRATION_ID);
+    // return WebClient.builder().baseUrl(userServiceGateway).filter(oauth)
+    // .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).build();
+    // }
+    //
+    // @Bean
+    // public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+    // http.authorizeExchange()
+    // .anyExchange()
+    // .authenticated()
+    // .and()
+    // .oauth2Login();
+    // return http.build();
+    // }
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(final ServerHttpSecurity http) {

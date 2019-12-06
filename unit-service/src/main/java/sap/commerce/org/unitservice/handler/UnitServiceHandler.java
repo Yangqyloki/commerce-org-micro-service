@@ -1,7 +1,18 @@
 package sap.commerce.org.unitservice.handler;
 
-import static sap.commerce.org.unitservice.constants.UnitServiceConstants.*;
-import static sap.commerce.org.unitservice.errors.UnitServiceErrors.*;
+import static sap.commerce.org.unitservice.constants.UnitServiceConstants.AUTHORIZATION;
+import static sap.commerce.org.unitservice.constants.UnitServiceConstants.B2B_ADMIN_GROUP;
+import static sap.commerce.org.unitservice.constants.UnitServiceConstants.BASE_SITE_ID;
+import static sap.commerce.org.unitservice.constants.UnitServiceConstants.UNIT_ID;
+import static sap.commerce.org.unitservice.constants.UnitServiceConstants.USER_ID;
+import static sap.commerce.org.unitservice.errors.UnitServiceErrors.INVALID_REQUEST;
+import static sap.commerce.org.unitservice.errors.UnitServiceErrors.INVALID_REQUEST_BASE_SITE_ID;
+import static sap.commerce.org.unitservice.errors.UnitServiceErrors.INVALID_REQUEST_REQUEST_BODY;
+import static sap.commerce.org.unitservice.errors.UnitServiceErrors.INVALID_REQUEST_REQUEST_HEADER;
+import static sap.commerce.org.unitservice.errors.UnitServiceErrors.INVALID_REQUEST_UNIT_ID;
+import static sap.commerce.org.unitservice.errors.UnitServiceErrors.INVALID_REQUEST_USER_ID;
+import static sap.commerce.org.unitservice.errors.UnitServiceErrors.INVALID_USER_NOT_ADMIN;
+import static sap.commerce.org.unitservice.errors.UnitServiceErrors.MISSING_PARAMETER;
 
 import java.util.List;
 import java.util.Map;
@@ -34,50 +45,49 @@ public class UnitServiceHandler {
     @Autowired
     private UnitClient unitClient;
 
-    public Mono<ServerResponse> getUnitsByUser(final ServerRequest request){
-//        validateCreateUnitPath(request.pathVariables());
-//        validateRequestBody(request.bodyToMono(UnitDTO.class).map(unit->validateRequestBody(unit)));
-//        validateRequestHeader(request.headers());
-        return unitClient.getUnitsByUser(request.pathVariable(USER_ID)).
-                flatMap(userGroups -> EntityResponse.fromObject(userGroups).contentType(MediaType.APPLICATION_JSON).
-                        status(HttpStatus.OK).build());
+    public Mono<ServerResponse> getUnitsByUser(final ServerRequest request) {
+        // validateCreateUnitPath(request.pathVariables());
+        // validateRequestBody(request.bodyToMono(UnitDTO.class).map(unit->validateRequestBody(unit)));
+        // validateRequestHeader(request.headers());
+        return unitClient.getUnitsByUser(request.pathVariable(USER_ID)).flatMap(userGroups -> EntityResponse
+            .fromObject(userGroups).contentType(MediaType.APPLICATION_JSON).status(HttpStatus.OK).build());
 
     }
 
-    public Mono<ServerResponse> createUnit(final ServerRequest request){
-//        validateCreateUnitPath(request.pathVariables());
-//        validateRequestBody(request.bodyToMono(UnitDTO.class).map(unit->validateRequestBody(unit)));
-//        validateRequestHeader(request.headers());
-        return  request.bodyToMono(UnitDTO.class).
-                flatMap(unit -> unitClient.creatUnit(request.pathVariable(USER_ID), unit)).
-                flatMap(result -> EntityResponse.fromObject(result).contentType(MediaType.APPLICATION_JSON).
-                        status(HttpStatus.OK).build());
+    public Mono<ServerResponse> createUnit(final ServerRequest request) {
+        // validateCreateUnitPath(request.pathVariables());
+        // validateRequestBody(request.bodyToMono(UnitDTO.class).map(unit->validateRequestBody(unit)));
+        // validateRequestHeader(request.headers());
+        return request.bodyToMono(UnitDTO.class)
+            .flatMap(unit -> unitClient.creatUnit(request.pathVariable(USER_ID), unit)).flatMap(result -> EntityResponse
+                .fromObject(result).contentType(MediaType.APPLICATION_JSON).status(HttpStatus.OK).build());
     }
 
-    public Mono<ServerResponse> createCustomerForUnit(final ServerRequest request){
-//        validateCreateUnitPath(request.pathVariables());
-//        validateRequestBody(request.bodyToMono(CustomerDTO.class).map(unit->validateRequestBody(unit)));
-//        validateRequestHeader(request.headers());
+    public Mono<ServerResponse> createCustomerForUnit(final ServerRequest request) {
+        // validateCreateUnitPath(request.pathVariables());
+        // validateRequestBody(request.bodyToMono(CustomerDTO.class).map(unit->validateRequestBody(unit)));
+        // validateRequestHeader(request.headers());
         return userClient.getUserGroups(request).flatMap(userGroupList -> {
             System.out.println("YQY userGroupList: " + userGroupList);
-            if(userGroupList.getUserGroups().stream().filter(group-> B2B_ADMIN_GROUP.equals(group.getUid())).findAny().isPresent())
-            {
+            if (userGroupList.getUserGroups().stream().filter(group -> B2B_ADMIN_GROUP.equals(group.getUid())).findAny()
+                .isPresent()) {
                 System.out.println("If Seg!!!!");
-                return request.bodyToMono(CustomerDTO.class).flatMap(customerInRequest->{
+                return request.bodyToMono(CustomerDTO.class).flatMap(customerInRequest -> {
                     OccCustomerDTO occCustomer = DTOConverter.convertCustomer(customerInRequest);
                     System.out.println("occCustomer: " + occCustomer);
-                    return userClient.createCustomer(request,occCustomer).flatMap((occCustomerInResopnse)->{
+                    return userClient.createCustomer(request, occCustomer).flatMap((occCustomerInResopnse) -> {
                         System.out.println("Set User Group!!!!!!");
-                        userClient.setCustomerToUserGroup(request,customerInRequest);
-                        return unitClient.createCustomerForUnit(request.pathVariable(UNIT_ID),customerInRequest);
+                        userClient.setCustomerToUserGroup(request, customerInRequest);
+                        return unitClient.createCustomerForUnit(request.pathVariable(UNIT_ID), customerInRequest);
                     });
                 });
 
             }
-            return Mono.error(new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST, List.of(INVALID_USER_NOT_ADMIN)));
+            return Mono.error(
+                new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST, List.of(INVALID_USER_NOT_ADMIN)));
 
-        }).flatMap(unit->EntityResponse.fromObject(unit).contentType(MediaType.APPLICATION_JSON).
-                status(HttpStatus.OK).build());
+        }).flatMap(unit -> EntityResponse.fromObject(unit).contentType(MediaType.APPLICATION_JSON).status(HttpStatus.OK)
+            .build());
     }
 
     private void validateCreateUnitPath(final Map<String, String> variables) {
@@ -99,26 +109,25 @@ public class UnitServiceHandler {
 
     private void validateRequestPath(final String path, final Errors error) {
         if (path == null || path.isBlank()) {
-            throw new GlobalWebException(HttpStatus.BAD_REQUEST, MISSING_PARAMETER,
-                    List.of(error));
+            throw new GlobalWebException(HttpStatus.BAD_REQUEST, MISSING_PARAMETER, List.of(error));
         }
     }
 
     private <T> T validateRequestBody(final T body) {
-//        System.out.println("validateRequestBody: " + body);
-//        request.bodyToMono(UnitRequestDTO.class).doOnError();
-//        request.bodyToMono(UnitRequestDTO.class).map(unit->{
-//            System.out.println("validateRequestBody unit: " + unit);
-//            if(unit == null){
-//                        throw new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST,
-//                                List.of(INVALID_REQUEST_REQUEST_BODY));
-//                    }
-//                    return unit;
-//                }
-//        );
+        // System.out.println("validateRequestBody: " + body);
+        // request.bodyToMono(UnitRequestDTO.class).doOnError();
+        // request.bodyToMono(UnitRequestDTO.class).map(unit->{
+        // System.out.println("validateRequestBody unit: " + unit);
+        // if(unit == null){
+        // throw new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST,
+        // List.of(INVALID_REQUEST_REQUEST_BODY));
+        // }
+        // return unit;
+        // }
+        // );
         if (body == null) {
             throw new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST,
-                    List.of(INVALID_REQUEST_REQUEST_BODY));
+                List.of(INVALID_REQUEST_REQUEST_BODY));
         }
         return body;
     }
@@ -126,7 +135,7 @@ public class UnitServiceHandler {
     private void validateRequestHeader(final ServerRequest.Headers headers) {
         if (CollectionUtils.isEmpty(headers.header(AUTHORIZATION)) || headers.header(AUTHORIZATION).get(0) == null) {
             throw new GlobalWebException(HttpStatus.BAD_REQUEST, INVALID_REQUEST,
-                    List.of(INVALID_REQUEST_REQUEST_HEADER));
+                List.of(INVALID_REQUEST_REQUEST_HEADER));
         }
 
     }

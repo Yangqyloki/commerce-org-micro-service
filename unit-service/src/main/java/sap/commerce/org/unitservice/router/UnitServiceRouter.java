@@ -18,9 +18,11 @@ public class UnitServiceRouter {
 
     @Bean
     public RouterFunction<ServerResponse> unitRouters(final UnitServiceHandler unitServiceHandler) {
-        return RouterFunctions
-                .route(RequestPredicates.GET(UNIT_SERVICE_UNITS), unitServiceHandler::getUnitsByUser)
-                .andRoute(RequestPredicates.POST(UNIT_SERVICE_UNITS).and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), unitServiceHandler::createUnit)
-                .andRoute(RequestPredicates.POST(UNIT_SERVICE_CREATE_CUSTOMER).and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), unitServiceHandler::createCustomerForUnit);
+        return RouterFunctions.route(RequestPredicates.GET(UNIT_SERVICE_UNITS), unitServiceHandler::getUnitsByUser)
+            .andRoute(
+                RequestPredicates.POST(UNIT_SERVICE_UNITS).and(RequestPredicates.accept(MediaType.APPLICATION_JSON)),
+                unitServiceHandler::createUnit)
+            .andRoute(RequestPredicates.POST(UNIT_SERVICE_CREATE_CUSTOMER)
+                .and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), unitServiceHandler::createCustomerForUnit);
     }
 }
