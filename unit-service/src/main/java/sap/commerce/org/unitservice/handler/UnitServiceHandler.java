@@ -46,8 +46,15 @@ public class UnitServiceHandler {
     public Mono<ServerResponse> getUnitsByUser(final ServerRequest request) {
         validateCreateUnitPath(request.pathVariables());
         validateRequestHeader(request.headers());
-        return unitClient.getUnitsByUser(request.pathVariable(USER_ID)).flatMap(userGroups -> EntityResponse
-            .fromObject(userGroups).contentType(MediaType.APPLICATION_JSON).status(HttpStatus.OK).build());
+        return userClient.getCustomerById(request)
+            .flatMap(occCustomerDTO -> unitClient.getUnitsByUser(occCustomerDTO.getUid()))
+            .flatMap(userGroups -> EntityResponse.fromObject(userGroups).contentType(MediaType.APPLICATION_JSON)
+                .status(HttpStatus.OK).build());
+
+        //
+        //
+        // unitClient.getUnitsByUser(request.pathVariable(USER_ID)).flatMap(userGroups -> EntityResponse
+        // .fromObject(userGroups).contentType(MediaType.APPLICATION_JSON).status(HttpStatus.OK).build());
 
     }
 
@@ -57,7 +64,13 @@ public class UnitServiceHandler {
         validateRequestHeader(request.headers());
         return request.bodyToMono(UnitDTO.class).flatMap(unit -> {
             validateRequestBody(unit);
-            return unitClient.creatUnit(request.pathVariable(USER_ID), unit);
+            return userClient.getUserGroups(request).flatMap(userGroupList -> {
+                if (userGroupList.getUserGroups().stream().filter(group -> B2B_ADMIN_GROUP.equals(group.getUid()))
+                    .findAny().isPresent()) {
+                    return unitClient.creatUnit(request.pathVariable(USER_ID), unit);
+                }
+                return Mono.error(new UnitServiceException(HttpStatus.BAD_REQUEST, INVALID_REQUEST));
+            });
         }).flatMap(result -> EntityResponse.fromObject(result).contentType(MediaType.APPLICATION_JSON)
             .status(HttpStatus.OK).build());
     }

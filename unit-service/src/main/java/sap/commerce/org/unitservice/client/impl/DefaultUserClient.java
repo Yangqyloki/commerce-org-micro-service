@@ -30,14 +30,26 @@ public class DefaultUserClient implements UserClient {
     @Value("${user.service.user.path}")
     private String userPath;
 
+    @Value("${user.service.users.path}")
+    private String usersPath;
+
     @Value("${user.service.usergroup.set.path}")
-    private String setUserGroupPath;
+    private String saveUserGroupPath;
 
     @Autowired
     private WebClient userServiceWebClient;
 
     @Autowired
     private UnitDao unitDao;
+
+    @Override
+    public Mono<OccCustomerDTO> getCustomerById(final ServerRequest request) {
+        return userServiceWebClient.get()
+            .uri(uriBuilder -> uriBuilder.path(userPath).build(request.pathVariable(BASE_SITE_ID),
+                request.pathVariable(USER_ID)))
+            .header(AUTHORIZATION, request.headers().header(AUTHORIZATION).get(0)).accept(MediaType.APPLICATION_JSON)
+            .retrieve().bodyToMono(OccCustomerDTO.class);
+    }
 
     @Override
     public Mono<UserGroupListDTO> getUserGroups(final ServerRequest request) {
@@ -51,7 +63,7 @@ public class DefaultUserClient implements UserClient {
     @Override
     public Mono<OccCustomerDTO> createCustomer(final ServerRequest request, final OccCustomerDTO occCustomer) {
         return userServiceWebClient.post()
-            .uri(uriBuilder -> uriBuilder.path(userPath).build(request.pathVariable(BASE_SITE_ID)))
+            .uri(uriBuilder -> uriBuilder.path(usersPath).build(request.pathVariable(BASE_SITE_ID)))
             .header(AUTHORIZATION, request.headers().header(AUTHORIZATION).get(0)).accept(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(occCustomer)).retrieve().bodyToMono(OccCustomerDTO.class);
     }
@@ -61,7 +73,7 @@ public class DefaultUserClient implements UserClient {
         customerInRequest.getRoles().forEach(role -> {
             final MemberListDTO memberList = DTOConverter.convertMemberList(customerInRequest);
             userServiceWebClient.put()
-                .uri(uriBuilder -> uriBuilder.path(userPath).build(request.pathVariable(BASE_SITE_ID), role))
+                .uri(uriBuilder -> uriBuilder.path(usersPath).build(request.pathVariable(BASE_SITE_ID), role))
                 .header(AUTHORIZATION, request.headers().header(AUTHORIZATION).get(0))
                 .accept(MediaType.APPLICATION_JSON).body(BodyInserters.fromValue(memberList)).retrieve();
         });
