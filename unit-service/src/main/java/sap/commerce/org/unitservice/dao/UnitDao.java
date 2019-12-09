@@ -64,7 +64,7 @@ public class UnitDao {
     public void saveUnitCustomer(final String unitId, final CustomerDTO customer) {
         final Query queryUnit = new Query();
         queryUnit.addCriteria(Criteria.where("unitId").is(unitId));
-        final Update update = new Update().push("customer", customer);
+        final Update update = new Update().push("unitCustomers", customer);
         mongoTemplate.upsert(queryUnit, update, UnitDTO.class, "b2b_commerce_org.unit");
     }
 }
