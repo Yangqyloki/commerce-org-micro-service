@@ -1,11 +1,9 @@
-package sap.commerce.org.unitservice.errors;
+package sap.commerce.org.unitservice.exceptions.errors;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import sap.commerce.cloud.hbcloudcommons.error.Errors;
-
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum UnitServiceErrors implements Errors {
+public enum UnitServiceErrors implements Error {
     INVALID_REQUEST("10000", "The request is invalid."), MISSING_PARAMETER("10001",
         "Required path parameter is missing."), INVALID_REQUEST_BASE_SITE_ID("10002",
             "baseSiteId is missing"), INVALID_REQUEST_UNIT_ID("10003", "unitId is missing"), INVALID_REQUEST_USER_ID(
