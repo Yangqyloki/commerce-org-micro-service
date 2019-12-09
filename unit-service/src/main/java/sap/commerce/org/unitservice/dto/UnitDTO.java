@@ -25,4 +25,6 @@ public class UnitDTO {
     private String path;
 
     private List<CustomerDTO> unitCustomers;
+
+    private CustomerDTO administrator;
 }
