@@ -1,4 +1,4 @@
-package sap.commerce.org.unitservice.dto.utils;
+package sap.commerce.org.unitservice.utils;
 
 import static sap.commerce.org.unitservice.constants.UnitServiceConstants.DEFAULT_PWD;
 

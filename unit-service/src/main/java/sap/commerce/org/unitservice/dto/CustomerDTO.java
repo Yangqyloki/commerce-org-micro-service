@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CustomerDTO extends abstractDTO {
+public class CustomerDTO extends AbstractDTO {
 
     private String title;
     private String firstName;
@@ -26,7 +26,7 @@ public class CustomerDTO extends abstractDTO {
     private List<String> roles;
 
     @Override
-    public boolean isEmpty() {
+    public boolean checkIfDTOEmpty() {
         return StringUtils.isBlank(this.firstName) || StringUtils.isBlank(this.lastName)
             || StringUtils.isBlank(this.title) || StringUtils.isBlank(this.email) || Objects.isNull(this.parentUnit)
             || CollectionUtils.isEmpty(roles);

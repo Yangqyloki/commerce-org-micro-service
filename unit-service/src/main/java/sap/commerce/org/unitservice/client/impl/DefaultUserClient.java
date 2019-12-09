@@ -19,7 +19,7 @@ import sap.commerce.org.unitservice.dto.CustomerDTO;
 import sap.commerce.org.unitservice.dto.MemberListDTO;
 import sap.commerce.org.unitservice.dto.OccCustomerDTO;
 import sap.commerce.org.unitservice.dto.UserGroupListDTO;
-import sap.commerce.org.unitservice.dto.utils.DTOConverter;
+import sap.commerce.org.unitservice.utils.DTOConverter;
 
 @Component
 public class DefaultUserClient implements UserClient {

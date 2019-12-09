@@ -29,8 +29,8 @@ import sap.commerce.org.unitservice.client.UserClient;
 import sap.commerce.org.unitservice.dto.CustomerDTO;
 import sap.commerce.org.unitservice.dto.OccCustomerDTO;
 import sap.commerce.org.unitservice.dto.UnitDTO;
-import sap.commerce.org.unitservice.dto.abstractDTO;
-import sap.commerce.org.unitservice.dto.utils.DTOConverter;
+import sap.commerce.org.unitservice.dto.AbstractDTO;
+import sap.commerce.org.unitservice.utils.DTOConverter;
 import sap.commerce.org.unitservice.exceptions.UnitServiceException;
 import sap.commerce.org.unitservice.exceptions.errors.UnitServiceErrors;
 
@@ -116,8 +116,8 @@ public class UnitServiceHandler {
         }
     }
 
-    private <T extends abstractDTO> void validateRequestBody(final T body) {
-        if (body == null || body.isEmpty()) {
+    private <T extends AbstractDTO> void validateRequestBody(final T body) {
+        if (body == null || body.checkIfDTOEmpty()) {
             throw new UnitServiceException(HttpStatus.BAD_REQUEST, INVALID_REQUEST_REQUEST_BODY);
         }
     }

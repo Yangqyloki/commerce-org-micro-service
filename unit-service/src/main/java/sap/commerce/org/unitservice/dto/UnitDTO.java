@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Document(collection = "b2b_commerce_org.unit")
-public class UnitDTO extends abstractDTO {
+public class UnitDTO extends AbstractDTO {
 
     private String unitId;
 
@@ -33,7 +33,7 @@ public class UnitDTO extends abstractDTO {
     private CustomerDTO administrator;
 
     @Override
-    public boolean isEmpty() {
+    public boolean checkIfDTOEmpty() {
         return StringUtils.isBlank(this.unitId) || StringUtils.isBlank(this.unitName)
             || StringUtils.isBlank(this.parentUnit) || StringUtils.isBlank(this.approvalProcess);
     }
