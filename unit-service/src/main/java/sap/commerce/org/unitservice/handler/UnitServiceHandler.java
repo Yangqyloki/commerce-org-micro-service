@@ -67,16 +67,16 @@ public class UnitServiceHandler {
         // validateRequestBody(request.bodyToMono(CustomerDTO.class).map(unit -> validateRequestBody(unit)));
         validateRequestHeader(request.headers());
         return userClient.getUserGroups(request).flatMap(userGroupList -> {
-            System.out.println("YQY userGroupList: " + userGroupList);
+            // System.out.println("YQY userGroupList: " + userGroupList);
             if (userGroupList.getUserGroups().stream().filter(group -> B2B_ADMIN_GROUP.equals(group.getUid())).findAny()
                 .isPresent()) {
-                System.out.println("If Seg!!!!");
+                // System.out.println("If Seg!!!!");
                 return request.bodyToMono(CustomerDTO.class).flatMap(customerInRequest -> {
                     validateRequestBody(customerInRequest);
                     OccCustomerDTO occCustomer = DTOConverter.convertCustomer(customerInRequest);
-                    System.out.println("occCustomer: " + occCustomer);
+                    // System.out.println("occCustomer: " + occCustomer);
                     return userClient.createCustomer(request, occCustomer).flatMap((occCustomerInResopnse) -> {
-                        System.out.println("Set User Group!!!!!!");
+                        // System.out.println("Set User Group!!!!!!");
                         userClient.setCustomerToUserGroup(request, customerInRequest);
                         return unitClient.createCustomerForUnit(request.pathVariable(UNIT_ID), customerInRequest);
                     });
