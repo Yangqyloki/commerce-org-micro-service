@@ -9,13 +9,20 @@ import reactor.core.publisher.Mono;
 import sap.commerce.org.unitservice.client.UnitClient;
 import sap.commerce.org.unitservice.dao.UnitDao;
 import sap.commerce.org.unitservice.dto.CustomerDTO;
+import sap.commerce.org.unitservice.dto.NotificationDTO;
+import sap.commerce.org.unitservice.dto.OccCustomerDTO;
 import sap.commerce.org.unitservice.dto.UnitDTO;
+import sap.commerce.org.unitservice.rabbitmq.QueueProducer;
+import sap.commerce.org.unitservice.utils.DTOConverter;
 
 @Component
 public class DefaultUnitClient implements UnitClient {
 
     // @Autowired
     // private UnitRepository unitRepository;
+
+    @Autowired
+    private QueueProducer queueProducer;
 
     @Autowired
     private UnitDao unitDao;
@@ -40,6 +47,14 @@ public class DefaultUnitClient implements UnitClient {
     @Override
     public Mono<UnitDTO> createCustomerForUnit(final String unitId, final CustomerDTO customer) {
         unitDao.saveUnitCustomer(unitId, customer);
+
+        final OccCustomerDTO message = DTOConverter.convertCustomer(customer);
+        try {
+            queueProducer.produce(new NotificationDTO(NotificationDTO.CREATE_USER, message));
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
+
         return Mono.just(unitDao.getUnitByUnitId(unitId));
     }
 }
