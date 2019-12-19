@@ -58,6 +58,11 @@ public class UnitServiceHandler {
 
     }
 
+    public Mono<ServerResponse> getUnits(final ServerRequest request) {
+        return unitClient.getUnitsByUser("linda.wolf@rustic-hw.com").flatMap(userGroups -> EntityResponse
+            .fromObject(userGroups).contentType(MediaType.APPLICATION_JSON).status(HttpStatus.OK).build());
+    }
+
     public Mono<ServerResponse> createUnit(final ServerRequest request) {
         validateCreateUnitPath(request.pathVariables());
         // validateRequestBody(request.bodyToMono(UnitDTO.class).map(unit -> validateRequestBody(unit)));

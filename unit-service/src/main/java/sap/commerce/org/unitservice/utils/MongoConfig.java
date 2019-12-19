@@ -15,13 +15,13 @@ import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 @Configuration
 public class MongoConfig {
     @Bean
-    public MappingMongoConverter mappingMongoConverter(MongoDbFactory factory, MongoMappingContext context,
-        BeanFactory beanFactory) {
-        DbRefResolver dbRefResolver = new DefaultDbRefResolver(factory);
-        MappingMongoConverter mappingConverter = new MappingMongoConverter(dbRefResolver, context);
+    public MappingMongoConverter mappingMongoConverter(final MongoDbFactory factory, final MongoMappingContext context,
+                                                       final BeanFactory beanFactory) {
+        final DbRefResolver dbRefResolver = new DefaultDbRefResolver(factory);
+        final MappingMongoConverter mappingConverter = new MappingMongoConverter(dbRefResolver, context);
         try {
             mappingConverter.setCustomConversions(beanFactory.getBean(CustomConversions.class));
-        } catch (NoSuchBeanDefinitionException ignore) {
+        } catch (final NoSuchBeanDefinitionException ignore) {
         }
 
         // Don't save _class to mongo
