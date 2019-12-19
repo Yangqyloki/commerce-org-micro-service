@@ -1,6 +1,5 @@
-b2b_commerce_org.unit.drop() 
-b2b_commerce_org.unitUser.drop()
-
+b2b_commerce_org.unit.drop()
+use b2b_commerce_org.unit
 db.b2b_commerce_org.unit.insert({"unitId":"Rustic","unitName":"Rustic","parentUnit":"","approvalProcess":"Escalation Approval with Merchant Check","path":"/Rustic","administrator":{"title":"ms","firstName":"Linda","lastName":"Wolf","email":"linda.wolf@rustic-hw.com","parentUnit":"Rustic","roles":["b2badmingroup"]}})
 db.b2b_commerce_org.unit.insert({"unitId":"Rustic Retail","unitName":"Rustic Retail","parentUnit":"Rustic","approvalProcess":"Escalation Approval with Merchant Check","path":"/Rustic/Rustic Retail"})
 db.b2b_commerce_org.unit.insert({"unitId":"Custom Retail","unitName":"Custom Retail","parentUnit":"Rustic Retail","approvalProcess":"Escalation Approval with Merchant Check","path":"/Rustic/Rustic Retail/Custom Retail"})
