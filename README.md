@@ -35,7 +35,7 @@ https://www.jianshu.com/p/14ffe0f3db94
 
 	- Import new certificate to java keystore:
 
-		`sudo keytool -import -alias hybris -file hybris.pem -keystore /usr/lib/jvm/java/jre/lib/security/cacerts`
+		```sudo keytool -import -alias hybris -file hybris.pem -keystore /usr/lib/jvm/java/jre/lib/security/cacerts```
 
 	-------------------------------------------
 
