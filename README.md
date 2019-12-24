@@ -17,6 +17,7 @@ Note the certificate is issued for 127.0.0.1, so should run the commerce at loca
 https://wiki.hybris.com/display/cloudss/Smartedit+is+not+working+after+Hybris+1811+upgrade
 
 -------------------------------------------
+
 brief steps to trust the cert at local:
 
 a. get cert from commerce server
@@ -34,10 +35,12 @@ sudo keytool -printcert -v -file hybris.pem
 d.Import new certificate to java keystore:
 
 sudo keytool -import -alias hybris -file hybris.pem -keystore /usr/lib/jvm/java/jre/lib/security/cacerts
+
 -------------------------------------------
 
 
 ------run unit service------
+
 3. get units for user with asagent token
 GET http://127.0.0.1:10086/unitservice/v1/powertools/users/linda.wolf@rustic-hw.com/units 
 
