@@ -1,0 +1,16 @@
+version: '2'
+services:
+  unit-service:
+    image: unit-service
+    container_name: unit-service
+    depends_on:
+      - mongodb-example
+    ports:
+      - 10086:10086
+  mongodb-example:
+    image: mongo:latest
+    container_name: mongo-example
+    hostname: mongo-example
+    ports:
+      - 27017:27017
+      
