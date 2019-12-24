@@ -23,19 +23,19 @@ https://www.jianshu.com/p/14ffe0f3db94
 
 	- get cert from commerce server
 
-	`openssl s_client -showcerts -connect localhost:9002`
+		`openssl s_client -showcerts -connect localhost:9002`
 
-	You will see details of the commerce certificate. You have to copy its content to notepad (from -----BEGIN CERTIFICATE----- to -----END CERTIFICATE-----):
+		You will see details of the commerce certificate. You have to copy its content to notepad (from -----BEGIN CERTIFICATE----- to -----END CERTIFICATE-----):
 
 	- create empty file named hybris.pem, then paste the content of copied certificate to that file
 
 	- optional step. Check the "hybris.pem" file to check if it was copied properly:
 
-	`sudo keytool -printcert -v -file hybris.pem`
+		`sudo keytool -printcert -v -file hybris.pem`
 
 	- Import new certificate to java keystore:
 
-	`sudo keytool -import -alias hybris -file hybris.pem -keystore /usr/lib/jvm/java/jre/lib/security/cacerts`
+		`sudo keytool -import -alias hybris -file hybris.pem -keystore /usr/lib/jvm/java/jre/lib/security/cacerts`
 
 	-------------------------------------------
 
