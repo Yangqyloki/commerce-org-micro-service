@@ -65,6 +65,7 @@ https://www.jianshu.com/p/14ffe0f3db94
 		"firstName":"Test firstName",
 		"lastName":"Test lastName",
 		"email":"1@qq.com",
+		"mobile":"13013001300",
 		"parentUnit":"Rustic",
 		"roles":["customergroup","b2bgroup"]
 	}
