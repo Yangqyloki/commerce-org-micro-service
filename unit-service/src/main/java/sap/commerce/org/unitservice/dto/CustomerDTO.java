@@ -22,6 +22,7 @@ public class CustomerDTO extends AbstractDTO {
     private String firstName;
     private String lastName;
     private String email;
+    private String mobile;
     private String parentUnit;
     private List<String> roles;
 

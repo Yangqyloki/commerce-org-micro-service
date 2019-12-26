@@ -15,7 +15,6 @@ public class UnitServiceRouter {
     public static final String UNIT_SERVICE_PREFIX = "/unitservice/v1/";
     public static final String UNIT_SERVICE_UNITS = UNIT_SERVICE_PREFIX + "{baseSiteId}/users/{userId}/units";
     public static final String UNIT_SERVICE_CREATE_CUSTOMER = UNIT_SERVICE_UNITS + "/{unitId}/customers";
-    public static final String TEST_URL = UNIT_SERVICE_PREFIX + "units";
 
     @Bean
     public RouterFunction<ServerResponse> unitRouters(final UnitServiceHandler unitServiceHandler) {
@@ -24,8 +23,6 @@ public class UnitServiceRouter {
                 RequestPredicates.POST(UNIT_SERVICE_UNITS).and(RequestPredicates.accept(MediaType.APPLICATION_JSON)),
                 unitServiceHandler::createUnit)
             .andRoute(RequestPredicates.POST(UNIT_SERVICE_CREATE_CUSTOMER)
-                .and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), unitServiceHandler::createCustomerForUnit)
-            .andRoute(RequestPredicates.GET(TEST_URL).and(RequestPredicates.accept(MediaType.APPLICATION_JSON)),
-                unitServiceHandler::getUnits);
+                .and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), unitServiceHandler::createCustomerForUnit);
     }
 }

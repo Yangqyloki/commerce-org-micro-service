@@ -15,10 +15,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class UnitServiceApplication {
 
-    private static final String OCC_CLIENT_REGISTRATION_ID = "occ";
+    // private static final String OCC_CLIENT_REGISTRATION_ID = "occ";
 
     @Value("${user.service.gateway}")
     private String userServiceGateway;
+
+    @Value("${kyma.gateway}")
+    private String kymaGateway;
 
     public static void main(final String[] args) {
         SpringApplication.run(UnitServiceApplication.class, args);
@@ -27,6 +30,12 @@ public class UnitServiceApplication {
     @Bean(name = { "userServiceWebClient" })
     public WebClient userServiceWebClient() {
         return WebClient.builder().baseUrl(userServiceGateway)
+            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).build();
+    }
+
+    @Bean(name = { "kymaClient" })
+    public WebClient kymaClient() {
+        return WebClient.builder().baseUrl(kymaGateway)
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).build();
     }
     // @Bean(name = {"userServiceWebClient"})

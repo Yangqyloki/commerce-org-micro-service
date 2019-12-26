@@ -8,6 +8,7 @@ import sap.commerce.org.unitservice.dto.CustomerDTO;
 import sap.commerce.org.unitservice.dto.MemberDTO;
 import sap.commerce.org.unitservice.dto.MemberListDTO;
 import sap.commerce.org.unitservice.dto.OccCustomerDTO;
+import sap.commerce.org.unitservice.dto.ValidateUserRequestDTO;
 
 public class DTOConverter {
 
@@ -26,5 +27,12 @@ public class DTOConverter {
         member.setName(customer.getLastName() + " " + customer.getFirstName());
         member.setUid(customer.getEmail());
         return new MemberListDTO(List.of(member));
+    }
+
+    public static ValidateUserRequestDTO convertValidateRequestBody(final CustomerDTO customer) {
+        final ValidateUserRequestDTO validateUserRequest = new ValidateUserRequestDTO();
+        validateUserRequest.setEmail(customer.getEmail());
+        validateUserRequest.setMobile(customer.getMobile());
+        return validateUserRequest;
     }
 }
