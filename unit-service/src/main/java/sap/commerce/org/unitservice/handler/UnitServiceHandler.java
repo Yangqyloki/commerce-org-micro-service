@@ -97,7 +97,7 @@ public class UnitServiceHandler {
                     if (userGroupList.getUserGroups().stream().filter(group -> B2B_ADMIN_GROUP.equals(group.getUid()))
                         .findAny().isPresent()) {
                         final OccCustomerDTO occCustomer = DTOConverter.convertCustomer(customerDTO);
-                        return userClient.createCustomer(request, occCustomer).flatMap((occCustomerInResopnse) -> {
+                        return userClient.createCustomer(request, occCustomer).flatMap((occCustomerInResponse) -> {
                             System.out.println("Set User Group!!!!!!");
                             userClient.setCustomerToUserGroup(request, customerDTO);
                             return unitClient.createCustomerForUnit(request.pathVariable(UNIT_ID), customerDTO);
@@ -105,10 +105,8 @@ public class UnitServiceHandler {
                     }
                     return Mono.error(new UnitServiceException(HttpStatus.BAD_REQUEST, INVALID_REQUEST));
                 }));
-
         }).flatMap(unit -> EntityResponse.fromObject(unit).contentType(MediaType.APPLICATION_JSON).status(HttpStatus.OK)
             .build());
-
         // validateCreateUnitPath(request.pathVariables());
         // // validateRequestBody(request.bodyToMono(CustomerDTO.class).map(unit -> validateRequestBody(unit)));
         // validateRequestHeader(request.headers());
